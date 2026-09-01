@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+.hidden { display: none !important; }
+
+/* Кнопки классов */
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+.class-btn {
+    padding: 20px;
+    font-size: 18px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Карточка ученика */
+.student-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.student-info h3 { margin: 0 0 5px 0; }
+.stats { font-size: 12px; color: #666; }
+
+/* Делаем блок с кнопками гибким */
+.cards-control {
+    display: flex;
+    gap: 8px; /* Расстояние между кнопками */
+}
+
+/* Общие стили для всех кнопок */
+.cards-control button {
+    height: 40px; /* Одинаковая высота */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    /* Убрали width: 40px отсюда */
+}
+
+/* Жесткая ширина только для цветных квадратных карточек */
+.btn-yellow, .btn-red { 
+    width: 40px; 
+}
+.btn-yellow { background: #ffd700; }
+.btn-red { background: #ff4d4d; color: white; }
+
+.btn-green { 
+    width: 40px;
+    background: #32cd32; 
+    color: white; 
+}
+
+/* Новые стили специально для текстовой кнопки */
+.btn-action {
+    width: auto; /* Ширина подстраивается под текст */
+    padding: 0 15px; /* Отступы по бокам */
+    background: #ccc;
+    color: #333;
+}
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система Карточек</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Экран 1: Выбор класса -->
+        <div id="classes-screen">
+            <h1>Выберите класс</h1>
+            <div class="class-grid" id="class-list">
+                <!-- Классы будут добавлены через JS -->
+            </div>
+        </div>
+
+        <!-- Экран 2: Урок -->
+        <div id="lesson-screen" class="hidden">
+            <button onclick="goBack()">🔙 Назад</button>
+            <h1 id="current-class-title">Класс</h1>
+            
+            <div class="students-list" id="students-list">
+                <!-- Ученики генерируются через JS -->
+            </div>
+
+            <button class="end-lesson-btn" onclick="endLesson()">🛑 Завершить урок</button>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
