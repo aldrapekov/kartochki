@@ -8,6 +8,14 @@
 </head>
 <body>
     <div id="app">
+        <!-- Экран авторизации (появляется, если пароль не введен) -->
+    <div id="auth-screen" class="auth-container">
+        <div class="auth-box">
+            <h2>🔐 Вход для учителя</h2>
+            <input type="password" id="admin-password" placeholder="Введите секретный пароль">
+            <button onclick="checkPassword()">Войти</button>
+        </div>
+    </div>
        <!-- Экран 1: Выбор класса -->
         <div id="classes-screen">
             <h1>Выберите класс</h1>
