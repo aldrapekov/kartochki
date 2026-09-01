@@ -20,25 +20,36 @@ const db = getDatabase(app);
 let studentsData = {};
 let currentClass = null;
 
-// Ваш секретный пароль (можете поменять на любой другой)
+// Задайте свой пароль здесь
 const SECRET_ADMIN_PASSWORD = "9251"; 
 
-// Проверяем при загрузке страницы, входил ли учитель ранее на этом устройстве
-window.addEventListener('DOMContentLoaded', () => {
+// Надежная проверка при загрузке страницы
+window.addEventListener('load', () => {
     const savedAuth = localStorage.getItem('isTeacherAuth');
-    if (savedAuth === 'true') {
-        document.getElementById('auth-screen').classList.add('hidden');
+    const authScreen = document.getElementById('auth-screen');
+    
+    if (savedAuth === 'true' && authScreen) {
+        authScreen.classList.add('hidden');
     }
 });
 
-// Функция проверки пароля
+// Исправленная функция проверки пароля с отладкой
 function checkPassword() {
-    const inputVal = document.getElementById('admin-password').value;
+    const passwordInput = document.getElementById('admin-password');
+    const authScreen = document.getElementById('auth-screen');
+    
+    if (!passwordInput || !authScreen) {
+        alert("Ошибка: элементы формы входа не найдены в HTML!");
+        return;
+    }
+
+    const inputVal = passwordInput.value;
+
     if (inputVal === SECRET_ADMIN_PASSWORD) {
         localStorage.setItem('isTeacherAuth', 'true');
-        document.getElementById('auth-screen').classList.add('hidden');
+        authScreen.classList.add('hidden');
     } else {
-        alert("Неверный пароль!");
+        alert("Неверный пароль! Проверьте правильность ввода.");
     }
 }
 
