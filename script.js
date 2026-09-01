@@ -20,6 +20,28 @@ const db = getDatabase(app);
 let studentsData = {};
 let currentClass = null;
 
+// Ваш секретный пароль (можете поменять на любой другой)
+const SECRET_ADMIN_PASSWORD = "9251"; 
+
+// Проверяем при загрузке страницы, входил ли учитель ранее на этом устройстве
+window.addEventListener('DOMContentLoaded', () => {
+    const savedAuth = localStorage.getItem('isTeacherAuth');
+    if (savedAuth === 'true') {
+        document.getElementById('auth-screen').classList.add('hidden');
+    }
+});
+
+// Функция проверки пароля
+function checkPassword() {
+    const inputVal = document.getElementById('admin-password').value;
+    if (inputVal === SECRET_ADMIN_PASSWORD) {
+        localStorage.setItem('isTeacherAuth', 'true');
+        document.getElementById('auth-screen').classList.add('hidden');
+    } else {
+        alert("Неверный пароль!");
+    }
+}
+
 // 4. Получение данных из базы в реальном времени
 const classesRef = ref(db, 'classes');
 onValue(classesRef, (snapshot) => {
@@ -231,4 +253,5 @@ window.addCard = addCard;
 window.redeemGreen = redeemGreen;
 window.addNewClass = addNewClass;
 window.addNewStudent = addNewStudent;
+window.checkPassword = checkPassword;
 window.endLesson = endLesson;
