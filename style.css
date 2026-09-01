@@ -77,3 +77,14 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
 }
+.add-student-btn {
+    width: 100%;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
