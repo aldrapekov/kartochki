@@ -26,13 +26,15 @@ onValue(classesRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
         studentsData = data;
-        renderClasses(); // Отрисовываем кнопки классов на главном экране
+        renderClasses(); 
         if (currentClass) {
-            renderStudents(); // Если открыт класс, обновляем список учеников
+            renderStudents(); 
         }
     } else {
-        // Если база пустая, загружаем тестовые классы
-        seedDatabase();
+        // Если база пустая, больше ничего не создаем автоматически
+        // seedDatabase();  
+        studentsData = {}; 
+        renderClasses();
     }
 });
 
@@ -133,6 +135,36 @@ function redeemGreen(studentId) {
         update(ref(db), updates);
     }
 }
+// Функция добавления нового класса
+function addNewClass() {
+    // 1. Спрашиваем название класса
+    const className = prompt("Введите название нового класса (например, 6А):");
+    if (!className || className.trim() === "") return;
+    
+    // 2. Спрашиваем имя первого ученика (обязательно для Firebase)
+    const studentName = prompt(`Класс "${className}" создается. Введите имя первого ученика:`);
+    if (!studentName || studentName.trim() === "") {
+        alert("Отмена: чтобы класс появился в базе, в нём должен быть хотя бы один ученик!");
+        return;
+    }
+
+    // 3. Генерируем данные ученика
+    const newStudentId = 's_' + Date.now();
+    const newStudent = { 
+        name: studentName.trim(), 
+        q_yellow: 0, 
+        q_red: 0, 
+        l_yellow: 0, 
+        l_green: 0, 
+        l_red: 0 
+    };
+
+    // 4. Отправляем в базу класс вместе с учеником
+    const updates = {};
+    updates[`classes/${className.trim()}/${newStudentId}`] = newStudent;
+    
+    update(ref(db), updates);
+}
 // Функция быстрого добавления ученика
 function addNewStudent() {
     // Всплывающее окно для ввода имени
@@ -192,27 +224,11 @@ function endLesson() {
     alert("Урок завершен! Статистика обновлена.");
 }
 
-// 12. Тестовые данные (создаются 1 раз, если база Firebase пустая)
-function seedDatabase() {
-    const initialData = {
-        "classes": {
-            "5А": {
-                "s1": { name: "Арман Т.", q_yellow: 3, q_red: 0, l_yellow: 0, l_green: 0, l_red: 0 },
-                "s2": { name: "Алиса В.", q_yellow: 0, q_red: 0, l_yellow: 0, l_green: 0, l_red: 0 }
-            },
-            "5Б": {
-                "s3": { name: "Данияр К.", q_yellow: 1, q_red: 0, l_yellow: 0, l_green: 0, l_red: 0 },
-                "s4": { name: "София М.", q_yellow: 0, q_red: 0, l_yellow: 0, l_green: 0, l_red: 0 }
-            }
-        }
-    };
-    update(ref(db), initialData);
-}
-
 // КРИТИЧЕСКИ ВАЖНО: Привязываем функции к window, чтобы HTML видeл клики
 window.openClass = openClass;
 window.goBack = goBack;
 window.addCard = addCard;
 window.redeemGreen = redeemGreen;
+window.addNewClass = addNewClass;
 window.addNewStudent = addNewStudent;
 window.endLesson = endLesson;
