@@ -214,4 +214,5 @@ window.openClass = openClass;
 window.goBack = goBack;
 window.addCard = addCard;
 window.redeemGreen = redeemGreen;
+window.addNewStudent = addNewStudent;
 window.endLesson = endLesson;
