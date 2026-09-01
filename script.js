@@ -133,7 +133,35 @@ function redeemGreen(studentId) {
         update(ref(db), updates);
     }
 }
+// Функция быстрого добавления ученика
+function addNewStudent() {
+    // Всплывающее окно для ввода имени
+    const studentName = prompt("Введите имя и фамилию ученика:");
+    
+    // Если нажали "Отмена" или ввели пустоту - ничего не делаем
+    if (!studentName || studentName.trim() === "") return;
 
+    // Генерируем уникальный ID на основе текущего времени (чтобы не было совпадений)
+    const newStudentId = 's_' + Date.now();
+
+    // Создаем карточку с нулевой статистикой
+    const newStudent = { 
+        name: studentName.trim(), 
+        q_yellow: 0, 
+        q_red: 0, 
+        l_yellow: 0, 
+        l_green: 0, 
+        l_red: 0 
+    };
+
+    // Отправляем в Firebase
+    const updates = {};
+    updates[`classes/${currentClass}/${newStudentId}`] = newStudent;
+    
+    update(ref(db), updates);
+    // Нам даже не нужно вызывать renderStudents(), 
+    // так как onValue сам заметит изменения в базе и обновит список на экране!
+}
 // 11. Завершение урока
 function endLesson() {
     if (!confirm("Завершить урок? Зеленые карточки сгорят, а штрафы перенесутся в четверть.")) return;
