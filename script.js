@@ -43,10 +43,12 @@ function checkPassword() {
     }
 }
 
-// 4. Получение данных из базы в реальном времени
+// 4. Получение данных из базы в реальном времени с отладкой
 const classesRef = ref(db, 'classes');
 onValue(classesRef, (snapshot) => {
     const data = snapshot.val();
+    console.log("Данные из Firebase получены:", data); // Посмотрим в консоли F12
+    
     if (data) {
         studentsData = data;
         renderClasses(); 
@@ -54,8 +56,7 @@ onValue(classesRef, (snapshot) => {
             renderStudents(); 
         }
     } else {
-        // Если база пустая, больше ничего не создаем автоматически
-        // seedDatabase();  
+        console.log("Внимание: ветка classes в базе пуста!");
         studentsData = {}; 
         renderClasses();
     }
