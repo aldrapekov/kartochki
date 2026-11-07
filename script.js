@@ -13,6 +13,7 @@ const firebaseConfig = {
   appId: "1:467392945380:web:cd7bb9d8c4f2998003e0f1",
   measurementId: "G-NY9BN4G7LT"
 };
+
 // 3. Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -23,7 +24,17 @@ let currentClass = null;
 // Задайте свой пароль здесь
 const SECRET_ADMIN_PASSWORD = "9251"; 
 
-// Исправленная функция проверки пароля с отладкой
+// Проверка авторизации при загрузке страницы
+window.addEventListener('load', () => {
+    const savedAuth = localStorage.getItem('isTeacherAuth');
+    const authScreen = document.getElementById('auth-screen');
+    
+    if (savedAuth === 'true' && authScreen) {
+        authScreen.classList.add('hidden');
+    }
+});
+
+// Функция проверки пароля
 function checkPassword() {
     const passwordInput = document.getElementById('admin-password');
     const authScreen = document.getElementById('auth-screen');
@@ -47,7 +58,7 @@ function checkPassword() {
 const classesRef = ref(db, 'classes');
 onValue(classesRef, (snapshot) => {
     const data = snapshot.val();
-    console.log("Данные из Firebase получены:", data); // Посмотрим в консоли F12
+    console.log("Данные из Firebase получены:", data); 
     
     if (data) {
         studentsData = data;
@@ -96,6 +107,7 @@ function goBack() {
 // 8. Отрисовка списка учеников
 function renderStudents() {
     const container = document.getElementById('students-list');
+    if (!container) return;
     container.innerHTML = '';
     
     const classStudents = studentsData[currentClass] || {};
@@ -159,20 +171,18 @@ function redeemGreen(studentId) {
         update(ref(db), updates);
     }
 }
+
 // Функция добавления нового класса
 function addNewClass() {
-    // 1. Спрашиваем название класса
     const className = prompt("Введите название нового класса (например, 6А):");
     if (!className || className.trim() === "") return;
     
-    // 2. Спрашиваем имя первого ученика (обязательно для Firebase)
     const studentName = prompt(`Класс "${className}" создается. Введите имя первого ученика:`);
     if (!studentName || studentName.trim() === "") {
         alert("Отмена: чтобы класс появился в базе, в нём должен быть хотя бы один ученик!");
         return;
     }
 
-    // 3. Генерируем данные ученика
     const newStudentId = 's_' + Date.now();
     const newStudent = { 
         name: studentName.trim(), 
@@ -183,24 +193,18 @@ function addNewClass() {
         l_red: 0 
     };
 
-    // 4. Отправляем в базу класс вместе с учеником
     const updates = {};
     updates[`classes/${className.trim()}/${newStudentId}`] = newStudent;
     
     update(ref(db), updates);
 }
+
 // Функция быстрого добавления ученика
 function addNewStudent() {
-    // Всплывающее окно для ввода имени
     const studentName = prompt("Введите имя и фамилию ученика:");
-    
-    // Если нажали "Отмена" или ввели пустоту - ничего не делаем
     if (!studentName || studentName.trim() === "") return;
 
-    // Генерируем уникальный ID на основе текущего времени (чтобы не было совпадений)
     const newStudentId = 's_' + Date.now();
-
-    // Создаем карточку с нулевой статистикой
     const newStudent = { 
         name: studentName.trim(), 
         q_yellow: 0, 
@@ -210,14 +214,12 @@ function addNewStudent() {
         l_red: 0 
     };
 
-    // Отправляем в Firebase
     const updates = {};
     updates[`classes/${currentClass}/${newStudentId}`] = newStudent;
     
     update(ref(db), updates);
-    // Нам даже не нужно вызывать renderStudents(), 
-    // так как onValue сам заметит изменения в базе и обновит список на экране!
 }
+
 // 11. Завершение урока
 function endLesson() {
     if (!confirm("Завершить урок? Зеленые карточки сгорят, а штрафы перенесутся в четверть.")) return;
@@ -248,7 +250,7 @@ function endLesson() {
     alert("Урок завершен! Статистика обновлена.");
 }
 
-// КРИТИЧЕСКИ ВАЖНО: Привязываем функции к window, чтобы HTML видeл клики
+// Привязываем функции к window, чтобы HTML видел клики
 window.openClass = openClass;
 window.goBack = goBack;
 window.addCard = addCard;
