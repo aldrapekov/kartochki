@@ -23,16 +23,6 @@ let currentClass = null;
 // Задайте свой пароль здесь
 const SECRET_ADMIN_PASSWORD = "9251"; 
 
-// Надежная проверка при загрузке страницы
-window.addEventListener('load', () => {
-    const savedAuth = localStorage.getItem('isTeacherAuth');
-    const authScreen = document.getElementById('auth-screen');
-    
-    if (savedAuth === 'true' && authScreen) {
-        authScreen.classList.add('hidden');
-    }
-});
-
 // Исправленная функция проверки пароля с отладкой
 function checkPassword() {
     const passwordInput = document.getElementById('admin-password');
